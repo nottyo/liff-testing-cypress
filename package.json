@@ -6,15 +6,22 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "test:unit": "vue-cli-service test:unit",
-    "test:e2e": "vue-cli-service test:e2e",
+    "cypress:open": "cypress open",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@bahmutov/add-typescript-to-cypress": "^2.1.2",
+    "bootstrap": "^4.4.1",
+    "bootstrap-vue": "^2.5.0",
     "core-js": "^3.6.4",
+    "cypress": "^4.1.0",
+    "liff-type": "^2.0.5",
+    "vconsole": "^3.3.4",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.2",
     "vue-property-decorator": "^8.3.0",
-    "vue-router": "^3.1.5"
+    "vue-router": "^3.1.5",
+    "vue-sweetalert2": "^3.0.3"
   },
   "devDependencies": {
     "@types/jest": "^24.0.19",
