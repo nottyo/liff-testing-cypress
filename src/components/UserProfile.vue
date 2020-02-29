@@ -1,7 +1,7 @@
 <template>
   <b-container fluid class="mt-3">
     <b-row align-h="center">
-      <b-img fluid v-bind="profileImage" rounded="circle" :src="profile.pictureUrl"></b-img>
+      <b-img fluid v-bind="profileImage" rounded="circle" data-at="cy-profile-image" :src="profile.pictureUrl"></b-img>
     </b-row>
     <b-table striped hover responsive :items="items" :fields="fields" class="mt-3"></b-table>
     <b-button variant="success" class="mr-3" @click="openWindow()" data-at="cy-open-window">Open Window</b-button>

@@ -1,18 +1,21 @@
 /// <reference types="Cypress" />
 import LINE from '@LINE/bot-sdk';
-import flexMessage from '../../src/assets/flex.json';
+import { locators } from '../fixtures/locators';
+
+const profile: LINE.Profile = {
+  displayName: 'mockDisplayName',
+  userId: '[mock]U1234567890',
+  pictureUrl: 'https://ourfunnylittlesite.com/wp-content/uploads/2018/07/1-4-696x696.jpg',
+  statusMessage: 'liff is controlled by Cypress'
+}
 
 describe('LIFF App Test', () => {
 
   beforeEach(() => {
+    cy.viewport('macbook-15')
     cy.visit(Cypress.config('baseUrl') as string, {
       onBeforeLoad: (window: any) => {
-        const profile: LINE.Profile = {
-          displayName: 'mockDisplayName',
-          userId: '[mock]U1234567890',
-          pictureUrl: 'https://ourfunnylittlesite.com/wp-content/uploads/2018/07/1-4-696x696.jpg',
-          statusMessage: 'liff is controlled by Cypress'
-        }
+        
         const openWindowMock = (params: any) => {
           expect(params).to.have.property('url')
         }
@@ -51,18 +54,41 @@ describe('LIFF App Test', () => {
     })
   })
 
-  it('works', () => {
-    // cy.viewport('iphone-x')
-    cy.wrap('foo').should('eq', 'foo')
+  it('should display mock profile image', () => {
+    cy.get(locators.profileImage).should('have.attr', 'src', profile.pictureUrl);
   })
 
-  it('open window', () => {
-    cy.get('[data-at="cy-open-window"]').click()
+  it('should be able to open window', () => {
+    cy.get(locators.openWindowBtn).click()
     cy.get('@openWindow').should('be.calledOnce')
   })
 
-  it('send message', () => {
-    cy.get('[data-at="cy-send-message"]').click()
+  it('should be able to send message', () => {
+    cy.get(locators.sendMessageBtn).click()
     cy.get('@sendMessages').should('be.calledOnce')
+    cy.get('.swal2-confirm').click()
   })
+
+  it('should be able to render in different viewport', () => {
+    cy.viewport('iphone-xr')
+    cy.get(locators.isInClient).should('have.text', 'true')
+  })
+
+  it('should handle liff init failure', () => {
+    const liffInitError = {
+      code: 'INIT_FAILED',
+      message: 'Failed to init LIFF SDK.'
+    }
+    cy.visit(Cypress.config('baseUrl') as string, {
+      onBeforeLoad: (window: any) => {
+        window.Cypress.liffMock = {
+          init: cy.stub().as('initFailed').rejects(liffInitError)
+        }
+      }
+    })
+    cy.get(locators.sweetAlert.content).should('have.text', liffInitError.message)
+    cy.get(locators.sweetAlert.confirmBtn).click()
+  })
+
+  
 })
